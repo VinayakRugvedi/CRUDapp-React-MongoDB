@@ -4,7 +4,6 @@ const taskSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   taskname: String,
   tasknotes: String,
-  id: Number,
   completed: Boolean
 })
 
