@@ -111,8 +111,9 @@ class EachTask extends React.Component {
     for(let task of tasks) {
       if(task.id === this.props.taskId) {
         tasks.splice(tasks.indexOf(task), 1)
-        fetch(`http://localhost:5000/tasks/${task.id}`, {
-          method: "DELETE"
+        fetch(`http://localhost:5000/tasks/`, {
+          method: "DELETE",
+          body : JSON.stringify({taskId:task.id})
         })
         break
       }
