@@ -54,8 +54,8 @@ router.patch('/:taskId', (req, res, next) => {
   })
 })
 
-router.delete('/:taskId', (req, res, next) => {
-  const taskid = req.params.taskId
+router.delete('/', (req, res, next) => {
+  const taskid = req.body.taskId
   console.log(taskid)
   Task.remove({id:taskid}).exec().then(result => {
     console.log(result)
