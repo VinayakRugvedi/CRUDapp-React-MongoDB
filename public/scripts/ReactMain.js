@@ -4,7 +4,6 @@ const request = async () => {
     const response = await fetch('http://localhost:5000/tasks');
     const json = await response.json();
     tasks = json
-    console.log(tasks, 'tasks obtained initially');
     ReactDOM.render(
       <TasksIncomplete allTasks={tasks}/>,
       document.getElementById('addedTaskContainer')
@@ -37,7 +36,6 @@ class EnterTask extends React.Component {
     })
       .then(response => response.json())
       .then(Json => {
-      console.log(Json)
       tasks.push({taskname:this.state.taskName, tasknotes:'', _id:Json.createdTask._id, completed:false})
       this.setState ({
         taskName : ''
@@ -90,7 +88,6 @@ class EachTask extends React.Component {
   }
 
   enableEditing () {
-    console.log("edit")
     this.setState({
       isDisabled : !this.state.isDisabled
     })
@@ -146,7 +143,6 @@ class EachTask extends React.Component {
   deleteTask () {
     for(let task of tasks) {
       if(task._id === this.props.taskId) {
-        console.log(task._id, 'task being deleted')
         tasks.splice(tasks.indexOf(task), 1)
         fetch('http://localhost:5000/tasks/', {
           method: "DELETE",
