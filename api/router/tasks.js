@@ -45,7 +45,7 @@ router.patch('/:taskId', (req, res, next) => {
   for(let on of req.body) {
     updateOn[on.propName] = on.propValue
   }
-  Task.update({id:taskid}, {$set: updateOn}).exec().then(result => {
+  Task.update({_id:taskid}, {$set: updateOn}).exec().then(result => {
     console.log(result)
     res.status(200).json(result)
   }).catch(err => {
