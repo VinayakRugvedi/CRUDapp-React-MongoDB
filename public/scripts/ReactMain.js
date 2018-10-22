@@ -177,6 +177,18 @@ class EachTask extends React.Component {
     for(let task of tasks) {
       if(task._id === this.props.taskId) {
         task.tasknotes = event.target.value
+        fetch('http://localhost:5000/tasks/' + task._id, {
+          method: "POST",
+          body: JSON.stringify([{
+            propName: 'tasknotes',
+            propValue: task.tasknotes
+          }]),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then( response => response.json())
+          .then(Json => console.log(Json))
         break
       }
     }
