@@ -105,10 +105,11 @@ class EachTask extends React.Component {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value
         fetch('http://localhost:5000/tasks/' + task._id, {
-          method: "PATCH",
-          body: JSON.stringify({
-            taskname: task.taskname
-          }),
+          method: "POST",
+          body: JSON.stringify([{
+            propName: 'taskname',
+            propValue: task.taskname
+          }]),
           headers: {
             'Content-Type': 'application/json'
           }
