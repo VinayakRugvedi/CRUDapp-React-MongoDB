@@ -4,7 +4,7 @@ const request = async () => {
     const response = await fetch('http://localhost:5000/tasks');
     const json = await response.json();
     tasks = json
-    console.log(tasks[0], 'tasks obtained initially');
+    console.log(tasks, 'tasks obtained initially');
     ReactDOM.render(
       <TasksIncomplete allTasks={tasks}/>,
       document.getElementById('addedTaskContainer')
@@ -104,6 +104,17 @@ class EachTask extends React.Component {
     for(let task of tasks) {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value
+        fetch('http://localhost:5000/tasks/' + task._id, {
+          method: "PATCH",
+          body: JSON.stringify({
+            taskname: task.taskname
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then( response => response.json())
+          .then(Json => console.log(Json))
         break
       }
     }
