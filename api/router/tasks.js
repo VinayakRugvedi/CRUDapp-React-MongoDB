@@ -42,13 +42,8 @@ router.post('/', (req, res, next) => {
 router.post('/:taskId', (req, res, next) => {
   const taskid = req.params.taskId
   console.log(taskid)
-  const updateOn = {}
-  for(let on of req.body) {
-    console.log(on.propName)
-    updateOn[on.propName] = on.propValue
-  }
-  console.log(updateOn, 'Updated')
-  Task.update({_id:taskid}, {$set: updateOn}).exec().then(result => {
+  console.log(req.body)
+  Task.update({_id:taskid}, {$set: req.body}).exec().then(result => {
     console.log(result)
     res.status(200).json(result)
   }).catch(err => {
