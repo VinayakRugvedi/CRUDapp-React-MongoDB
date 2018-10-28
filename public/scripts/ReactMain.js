@@ -35,8 +35,8 @@ class EnterTask extends React.Component {
       }
     })
       .then(response => response.json())
-      .then(Json => {
-      tasks.push({taskname:this.state.taskName, tasknotes:'', _id:Json.createdTask._id, completed:false})
+      .then(json => {
+      tasks.push({taskname:this.state.taskName, tasknotes:'', _id:json.createdTask._id, completed:false})
       this.setState ({
         taskName : ''
       })
@@ -100,19 +100,18 @@ class EachTask extends React.Component {
     //Filter
     for(let task of tasks) {
       if(task._id === this.props.taskId) {
-        task.taskname = event.target.value
+        task.taskname = event.target.value //never hardcode urls
         fetch('http://localhost:5000/tasks/' + task._id, {
           method: "POST",
-          body: JSON.stringify([{
-            propName: 'taskname',
-            propValue: task.taskname
-          }]),
+          body: JSON.stringify({
+            'taskname': task.taskname
+          }),
           headers: {
             'Content-Type': 'application/json'
           }
         })
           .then( response => response.json())
-          .then(Json => console.log(Json))
+          .then(json => console.log(json))
         break
       }
     }
@@ -124,16 +123,15 @@ class EachTask extends React.Component {
         task.completed = !task.completed
         fetch('http://localhost:5000/tasks/' + task._id, {
           method: "POST",
-          body: JSON.stringify([{
-            propName: 'completed',
-            propValue: task.completed
-          }]),
+          body: JSON.stringify({
+            'completed': task.completed
+          }),
           headers: {
             'Content-Type': 'application/json'
           }
         })
           .then( response => response.json())
-          .then(Json => console.log(Json))
+          .then(json => console.log(json))
         break
       }
     }
@@ -152,8 +150,8 @@ class EachTask extends React.Component {
           }
         })
         .then(response => response.json())
-        .then(Json => {
-          console.log(Json)
+        .then(json => {
+          console.log(json)
           this.renderAgain()
         })
         break
@@ -187,16 +185,15 @@ class EachTask extends React.Component {
         task.tasknotes = event.target.value
         fetch('http://localhost:5000/tasks/' + task._id, {
           method: "POST",
-          body: JSON.stringify([{
-            propName: 'tasknotes',
-            propValue: task.tasknotes
-          }]),
+          body: JSON.stringify({
+           'tasknotes': task.tasknotes
+          }),
           headers: {
             'Content-Type': 'application/json'
           }
         })
           .then( response => response.json())
-          .then(Json => console.log(Json))
+          .then(json => console.log(json))
         break
       }
     }
