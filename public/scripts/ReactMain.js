@@ -1,4 +1,4 @@
-var tasks = []
+// var tasks = []
 
 const request = async () => {
     const response = await fetch('http://localhost:5000/tasks');
@@ -13,7 +13,31 @@ const request = async () => {
       document.getElementById('completedTaskContainer')
     )
 }
-request();
+// request();
+
+class MainComponent extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      tasks : props.request()
+    }
+  }
+
+  render() {
+    return (
+      <EnterTask/>
+      <div id="addedTaskContainer">
+      <h3>Tasks Yet to be Done! - &darr;</h3>
+      <TasksIncomplete allTasks={this.state.tasks}/>
+      </div>
+      <div class="vertLine"></div>
+      <div id="completedTaskContainer">
+      <h3>Completed Tasks... - &darr;</h3>
+      <TasksCompleted allTasks={this.state.tasks}/>
+      </div>
+    )
+  }
+}
 
 class EnterTask extends React.Component {
   constructor (props) {
@@ -234,7 +258,7 @@ function TasksIncomplete (props) {
   })
     return (
       <div>
-      <h3>Tasks Yet to be Done! - &darr;</h3>
+      // <h3>Tasks Yet to be Done! - &darr;</h3>
       {tasksToBeRendered}
       </div>
     )
@@ -250,7 +274,7 @@ function TasksIncomplete (props) {
     })
     return (
       <div>
-      <h3>Completed Tasks... - &darr;</h3>
+      // <h3>Completed Tasks... - &darr;</h3>
       {tasksToBeRendered}
       </div>
     )
