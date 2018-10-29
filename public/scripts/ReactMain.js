@@ -97,7 +97,12 @@ class EachTask extends React.Component {
           }
         })
           .then( response => response.json())
-          .then(json => console.log(json))
+          .then(
+            json => {
+              console.log(json)
+              this.props.reInitializeTasks(this.props.tasks)
+            }
+          )
         break
       }
     }
@@ -117,16 +122,22 @@ class EachTask extends React.Component {
           }
         })
           .then( response => response.json())
-          .then(json => console.log(json))
+          .then(
+            json => {
+              console.log(json)
+              this.props.reInitializeTasks(this.props.tasks)
+            }
+          )
         break
       }
     }
   }
 
   deleteTask () {
+    // var tasks = [...this.props.tasks]
     for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
-        tasks.splice(tasks.indexOf(task), 1)
+        this.props.tasks.splice(this.props.tasks.indexOf(task), 1)
         fetch('http://localhost:5000/tasks/', {
           method: "DELETE",
           body : JSON.stringify({taskId:task._id}),
@@ -135,9 +146,12 @@ class EachTask extends React.Component {
           }
         })
         .then(response => response.json())
-        .then(json => {
-          console.log(json)
-        })
+        .then(
+          json => {
+            console.log(json)
+            this.props.reInitializeTasks(this.props.tasks)
+          }
+        )
         break
       }
     }
@@ -177,7 +191,12 @@ class EachTask extends React.Component {
           }
         })
           .then( response => response.json())
-          .then(json => console.log(json))
+          .then(
+            json => {
+              console.log(json)
+              this.props.reInitializeTasks(this.props.tasks)
+            }
+          )
         break
       }
     }
@@ -203,7 +222,7 @@ function TasksIncomplete (props) {
   var tasksToBeRendered = props.allTasks.map( function (task) {
     if (!task.completed) {
       return (
-        <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id}/>
+        <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
       )
     }
   })
@@ -218,7 +237,7 @@ function TasksIncomplete (props) {
     var tasksToBeRendered = props.allTasks.map( function (task) {
       if (task.completed) {
         return (
-          <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id}/>
+          <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
         )
       }
     })
@@ -236,31 +255,39 @@ function TasksIncomplete (props) {
         tasks : [],
       }
       this.updateTasks = this.updateTasks.bind(this)
+      this.reInitializeTasks = this.reInitializeTasks.bind(this)
     }
 
-    updateTasks(task) {
-      console.log(task, 'called')
-      this.setState({
-        tasks: [...this.state.tasks, task]
-      })
-      console.log(this.state.tasks, 'state')
-    }
-
-    render() {
-      if(this.state.tasks.length === 0) {
+    componentWillMount() {
         var tasksFromDB
         fetch('http://localhost:5000/tasks').then(
           response => response.json()
         ).then(
           json => {
             tasksFromDB = json
+            console.log(tasksFromDB,'from DB')
             this.setState({
-              tasks : [...this.state.tasks, tasksFromDB]
+              tasks : [...tasksFromDB] // Check it man
             })
           }
         )
-      }
+    }
 
+    updateTasks(task) {
+      // console.log(task, 'called')
+      this.setState({
+        tasks: [...this.state.tasks, task]
+      })
+      // console.log(this.state.tasks, 'state')
+    }
+
+    reInitializeTasks(tasks) {
+      this.setState({
+        tasks : [...tasks]
+      })
+    }
+
+    render() {
       return (
         <div>
         <div id="getTask">
@@ -268,12 +295,12 @@ function TasksIncomplete (props) {
         </div>
         <div id="addedTaskContainer">
         <h3>Tasks Yet to be Done! - &darr;</h3>
-        <TasksIncomplete allTasks={this.state.tasks}/>
+        <TasksIncomplete allTasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         <div className="vertLine"></div>
         <div id="completedTaskContainer">
         <h3>Completed Tasks... - &darr;</h3>
-        <TasksCompleted allTasks={this.state.tasks}/>
+        <TasksCompleted allTasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         </div>
       )
