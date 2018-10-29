@@ -62,9 +62,9 @@ class EachTask extends React.Component {
       isHidden : true,
       displayNotes : 'none',
       edit : '\u270E',
-      // tasks : this.props.tasks
       // save : '\u{0270C}'
     }
+    this.tasks = [...this.props.tasks]
     this.enableEditing = this.enableEditing.bind(this)
     this.toggleTask = this.toggleTask.bind(this)
     this.editing = this.editing.bind(this)
@@ -84,7 +84,7 @@ class EachTask extends React.Component {
       taskData : event.target.value
     })
     //Filter
-    for(let task of this.props.tasks) {
+    for(let task of this.tasks) {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value //never hardcode urls
         fetch('http://localhost:5000/tasks/' + task._id, {
@@ -100,7 +100,7 @@ class EachTask extends React.Component {
           .then(
             json => {
               console.log(json)
-              this.props.reInitializeTasks(this.props.tasks)
+              this.props.reInitializeTasks(this.tasks)
             }
           )
         break
@@ -109,7 +109,7 @@ class EachTask extends React.Component {
   }
 
   toggleTask () {
-    for(let task of this.props.tasks) {
+    for(let task of this.tasks) {
       if(task._id === this.props.taskId) {
         task.completed = !task.completed
         fetch('http://localhost:5000/tasks/' + task._id, {
@@ -125,7 +125,7 @@ class EachTask extends React.Component {
           .then(
             json => {
               console.log(json)
-              this.props.reInitializeTasks(this.props.tasks)
+              this.props.reInitializeTasks(this.tasks)
             }
           )
         break
@@ -134,10 +134,9 @@ class EachTask extends React.Component {
   }
 
   deleteTask () {
-    // var tasks = [...this.props.tasks]
-    for(let task of this.props.tasks) {
+    for(let task of this.tasks) {
       if(task._id === this.props.taskId) {
-        this.props.tasks.splice(this.props.tasks.indexOf(task), 1)
+        this.tasks.splice(this.tasks.indexOf(task), 1)
         fetch('http://localhost:5000/tasks/', {
           method: "DELETE",
           body : JSON.stringify({taskId:task._id}),
@@ -149,7 +148,7 @@ class EachTask extends React.Component {
         .then(
           json => {
             console.log(json)
-            this.props.reInitializeTasks(this.props.tasks)
+            this.props.reInitializeTasks(this.tasks)
           }
         )
         break
@@ -178,7 +177,7 @@ class EachTask extends React.Component {
     this.setState ({
       taskNotesData : event.target.value
     })
-    for(let task of this.props.tasks) {
+    for(let task of this.tasks) {
       if(task._id === this.props.taskId) {
         task.tasknotes = event.target.value
         fetch('http://localhost:5000/tasks/' + task._id, {
@@ -194,7 +193,7 @@ class EachTask extends React.Component {
           .then(
             json => {
               console.log(json)
-              this.props.reInitializeTasks(this.props.tasks)
+              this.props.reInitializeTasks(this.tasks)
             }
           )
         break
