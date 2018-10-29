@@ -4,47 +4,14 @@ const request = async () => {
     const response = await fetch('http://localhost:5000/tasks');
     const json = await response.json();
     tasks = json
-    ReactDOM.render(
-      <TasksIncomplete allTasks={tasks}/>,
-      document.getElementById('addedTaskContainer')
-    )
-    ReactDOM.render(
-      <TasksCompleted allTasks={tasks}/>,
-      document.getElementById('completedTaskContainer')
-    )
 }
 // request();
-
-class MainComponent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      tasks : props.request()
-    }
-  }
-
-  render() {
-    return (
-      <EnterTask/>
-      <div id="addedTaskContainer">
-      <h3>Tasks Yet to be Done! - &darr;</h3>
-      <TasksIncomplete allTasks={this.state.tasks}/>
-      </div>
-      <div class="vertLine"></div>
-      <div id="completedTaskContainer">
-      <h3>Completed Tasks... - &darr;</h3>
-      <TasksCompleted allTasks={this.state.tasks}/>
-      </div>
-    )
-  }
-}
 
 class EnterTask extends React.Component {
   constructor (props) {
     super (props)
     this.state = {
-      taskName : '',
-      key : 0
+      taskName : ''
     }
     this.acceptingTask = this.acceptingTask.bind(this)
     this.readingTask = this.readingTask.bind(this)
@@ -60,14 +27,11 @@ class EnterTask extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-      tasks.push({taskname:this.state.taskName, tasknotes:'', _id:json.createdTask._id, completed:false})
+      console.log(this.props, 'in first compo')
+      this.props.updateTasks({taskname:this.state.taskName, tasknotes:'', _id:json.createdTask._id, completed:false})
       this.setState ({
         taskName : ''
       })
-      ReactDOM.render(
-        <TasksIncomplete allTasks={tasks}/>,
-        document.getElementById('addedTaskContainer')
-      )
     })
   }
 
@@ -101,6 +65,7 @@ class EachTask extends React.Component {
       isHidden : true,
       displayNotes : 'none',
       edit : '\u270E',
+      // tasks : this.props.tasks
       // save : '\u{0270C}'
     }
     this.enableEditing = this.enableEditing.bind(this)
@@ -122,7 +87,7 @@ class EachTask extends React.Component {
       taskData : event.target.value
     })
     //Filter
-    for(let task of tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value //never hardcode urls
         fetch('http://localhost:5000/tasks/' + task._id, {
@@ -142,7 +107,7 @@ class EachTask extends React.Component {
   }
 
   toggleTask () {
-    for(let task of tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.completed = !task.completed
         fetch('http://localhost:5000/tasks/' + task._id, {
@@ -159,11 +124,10 @@ class EachTask extends React.Component {
         break
       }
     }
-    this.renderAgain()
   }
 
   deleteTask () {
-    for(let task of tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         tasks.splice(tasks.indexOf(task), 1)
         fetch('http://localhost:5000/tasks/', {
@@ -176,7 +140,6 @@ class EachTask extends React.Component {
         .then(response => response.json())
         .then(json => {
           console.log(json)
-          this.renderAgain()
         })
         break
       }
@@ -204,7 +167,7 @@ class EachTask extends React.Component {
     this.setState ({
       taskNotesData : event.target.value
     })
-    for(let task of tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.tasknotes = event.target.value
         fetch('http://localhost:5000/tasks/' + task._id, {
@@ -223,16 +186,6 @@ class EachTask extends React.Component {
     }
   }
 
-  renderAgain() {
-    ReactDOM.render(
-      <TasksIncomplete allTasks={tasks}/>,
-      document.getElementById('addedTaskContainer')
-    )
-    ReactDOM.render(
-      <TasksCompleted allTasks={tasks}/>,
-      document.getElementById('completedTaskContainer')
-    )
-  }
 
   render () {
     return (
@@ -249,6 +202,7 @@ class EachTask extends React.Component {
 }
 
 function TasksIncomplete (props) {
+  console.log(props.allTasks, 'in tasksincomplete')
   var tasksToBeRendered = props.allTasks.map( function (task) {
     if (!task.completed) {
       return (
@@ -258,7 +212,6 @@ function TasksIncomplete (props) {
   })
     return (
       <div>
-      // <h3>Tasks Yet to be Done! - &darr;</h3>
       {tasksToBeRendered}
       </div>
     )
@@ -274,21 +227,49 @@ function TasksIncomplete (props) {
     })
     return (
       <div>
-      // <h3>Completed Tasks... - &darr;</h3>
       {tasksToBeRendered}
       </div>
     )
   }
 
+  class MainComponent extends React.Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        tasks : [],
+      }
+      this.updateTasks = this.updateTasks.bind(this)
+    }
+
+    updateTasks(task) {
+      console.log(task, 'called')
+      this.setState({
+        tasks: [...this.state.tasks, task]
+      })
+      console.log(this.state.tasks, 'state')
+    }
+
+    render() {
+      return (
+        <div>
+        <div id="getTask">
+        <EnterTask updateTasks={this.updateTasks}/>
+        </div>
+        <div id="addedTaskContainer">
+        <h3>Tasks Yet to be Done! - &darr;</h3>
+        <TasksIncomplete allTasks={this.state.tasks}/>
+        </div>
+        <div className="vertLine"></div>
+        <div id="completedTaskContainer">
+        <h3>Completed Tasks... - &darr;</h3>
+        <TasksCompleted allTasks={this.state.tasks}/>
+        </div>
+        </div>
+      )
+    }
+  }
+
   ReactDOM.render(
-    <EnterTask/>,
-    document.getElementById('getTask')
-  )
-  ReactDOM.render(
-    <TasksIncomplete allTasks={tasks}/>,
-    document.getElementById('addedTaskContainer')
-  )
-  ReactDOM.render(
-    <TasksCompleted allTasks={tasks}/>,
-    document.getElementById('completedTaskContainer')
+    <MainComponent request={request}/>,
+    document.getElementById('mainwrapper')
   )
