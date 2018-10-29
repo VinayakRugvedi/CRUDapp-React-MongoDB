@@ -1,10 +1,11 @@
 // var tasks = []
 
-const request = async () => {
-    const response = await fetch('http://localhost:5000/tasks');
-    const json = await response.json();
-    tasks = json
-}
+// const request = async () => {
+//     const response = await fetch('http://localhost:5000/tasks');
+//     const json = await response.json();
+//     tasks = json
+//     return tasks
+// }
 // request();
 
 class EnterTask extends React.Component {
@@ -39,10 +40,6 @@ class EnterTask extends React.Component {
     this.setState ({
       taskName : event.target.value
     })
-    // Why Why Why..?
-    // this.state.taskName = event.target.value
-    // console.log(this.state.taskName)
-    // console.log(event.target.value, 'event target')
   }
 
   render () {
@@ -206,7 +203,7 @@ function TasksIncomplete (props) {
   var tasksToBeRendered = props.allTasks.map( function (task) {
     if (!task.completed) {
       return (
-        <EachTask taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id}/>
+        <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id}/>
       )
     }
   })
@@ -221,7 +218,7 @@ function TasksIncomplete (props) {
     var tasksToBeRendered = props.allTasks.map( function (task) {
       if (task.completed) {
         return (
-          <EachTask taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id}/>
+          <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id}/>
         )
       }
     })
@@ -250,6 +247,20 @@ function TasksIncomplete (props) {
     }
 
     render() {
+      if(this.state.tasks.length === 0) {
+        var tasksFromDB
+        fetch('http://localhost:5000/tasks').then(
+          response => response.json()
+        ).then(
+          json => {
+            tasksFromDB = json
+            this.setState({
+              tasks : [...this.state.tasks, tasksFromDB]
+            })
+          }
+        )
+      }
+
       return (
         <div>
         <div id="getTask">
@@ -270,6 +281,6 @@ function TasksIncomplete (props) {
   }
 
   ReactDOM.render(
-    <MainComponent request={request}/>,
+    <MainComponent/>,
     document.getElementById('mainwrapper')
   )
