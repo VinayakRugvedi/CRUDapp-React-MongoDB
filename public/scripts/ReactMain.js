@@ -1,13 +1,3 @@
-// var tasks = []
-
-// const request = async () => {
-//     const response = await fetch('http://localhost:5000/tasks');
-//     const json = await response.json();
-//     tasks = json
-//     return tasks
-// }
-// request();
-
 class EnterTask extends React.Component {
   constructor (props) {
     super (props)
@@ -28,7 +18,6 @@ class EnterTask extends React.Component {
     })
       .then(response => response.json())
       .then(json => {
-      console.log(this.props, 'in first compo')
       this.props.updateTasks({taskname:this.state.taskName, tasknotes:'', _id:json.createdTask._id, completed:false})
       this.setState ({
         taskName : ''
@@ -62,7 +51,6 @@ class EachTask extends React.Component {
       isHidden : true,
       displayNotes : 'none',
       edit : '\u270E',
-      // save : '\u{0270C}'
     }
     this.tasks = [...this.props.tasks]
     this.enableEditing = this.enableEditing.bind(this)
@@ -201,7 +189,6 @@ class EachTask extends React.Component {
     }
   }
 
-
   render () {
     return (
       <div className="container">
@@ -217,7 +204,6 @@ class EachTask extends React.Component {
 }
 
 function TasksIncomplete (props) {
-  console.log(props.allTasks, 'in tasksincomplete')
   var tasksToBeRendered = props.allTasks.map( function (task) {
     if (!task.completed) {
       return (
@@ -264,7 +250,6 @@ function TasksIncomplete (props) {
         ).then(
           json => {
             tasksFromDB = json
-            console.log(tasksFromDB,'from DB')
             this.setState({
               tasks : [...tasksFromDB] // Check it man
             })
@@ -273,11 +258,9 @@ function TasksIncomplete (props) {
     }
 
     updateTasks(task) {
-      // console.log(task, 'called')
       this.setState({
         tasks: [...this.state.tasks, task]
       })
-      // console.log(this.state.tasks, 'state')
     }
 
     reInitializeTasks(tasks) {
