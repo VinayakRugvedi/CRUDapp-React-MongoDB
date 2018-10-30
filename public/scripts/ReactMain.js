@@ -205,11 +205,9 @@ class EachTask extends React.Component {
 
 function TasksIncomplete (props) {
   var tasksToBeRendered = props.allTasks.map( function (task) {
-    if (!task.completed) {
       return (
         <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
       )
-    }
   })
     return (
       <div>
@@ -220,11 +218,9 @@ function TasksIncomplete (props) {
 
   function TasksCompleted (props) {
     var tasksToBeRendered = props.allTasks.map( function (task) {
-      if (task.completed) {
         return (
           <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
         )
-      }
     })
     return (
       <div>
@@ -270,6 +266,16 @@ function TasksIncomplete (props) {
     }
 
     render() {
+        var incompleteTasks = [], completedTasks = []
+        for( let task of this.state.tasks) {
+          console.log(task.completed, 'completed state')
+          if(!task.completed) {
+            incompleteTasks.push(task)
+          }
+          else {
+            completedTasks.push(task)
+          }
+        }
       return (
         <div>
         <div id="getTask">
@@ -277,12 +283,12 @@ function TasksIncomplete (props) {
         </div>
         <div id="addedTaskContainer">
         <h3>Tasks Yet to be Done! - &darr;</h3>
-        <TasksIncomplete allTasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
+        <TasksIncomplete allTasks={incompleteTasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         <div className="vertLine"></div>
         <div id="completedTaskContainer">
         <h3>Completed Tasks... - &darr;</h3>
-        <TasksCompleted allTasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
+        <TasksCompleted allTasks={completedTasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         </div>
       )
@@ -293,3 +299,7 @@ function TasksIncomplete (props) {
     <MainComponent/>,
     document.getElementById('mainwrapper')
   )
+
+// How to not hardcode urls..?
+// Make less access to DB i.e using event.target.value
+// Use event object more effectively
