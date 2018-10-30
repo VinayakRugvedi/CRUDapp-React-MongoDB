@@ -59,6 +59,24 @@ class EachTask extends React.Component {
     this.deleteTask = this.deleteTask.bind(this)
     this.addNotes = this.addNotes.bind(this)
     this.saveNotes = this.saveNotes.bind(this)
+    this.fetchCall = this.fetchCall.bind(this)
+  }
+
+  fetchCall(bodyOfRequest, Id = '') {
+    fetch('http://localhost:5000/tasks/' + Id, {
+      method: "POST",
+      body: bodyOfRequest,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then( response => response.json())
+      .then(
+        json => {
+          console.log(json)
+          this.props.reInitializeTasks(this.tasks)
+        }
+      )
   }
 
   enableEditing () {
@@ -75,22 +93,7 @@ class EachTask extends React.Component {
     for(let task of this.tasks) {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value //never hardcode urls
-        fetch('http://localhost:5000/tasks/' + task._id, {
-          method: "POST",
-          body: JSON.stringify({
-            'taskname': task.taskname
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then( response => response.json())
-          .then(
-            json => {
-              console.log(json)
-              this.props.reInitializeTasks(this.tasks)
-            }
-          )
+        this.fetchCall(JSON.stringify({'taskname': task.taskname}), task._id)
         break
       }
     }
