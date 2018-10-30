@@ -103,22 +103,7 @@ class EachTask extends React.Component {
     for(let task of this.tasks) {
       if(task._id === this.props.taskId) {
         task.completed = !task.completed
-        fetch('http://localhost:5000/tasks/' + task._id, {
-          method: "POST",
-          body: JSON.stringify({
-            'completed': task.completed
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then( response => response.json())
-          .then(
-            json => {
-              console.log(json)
-              this.props.reInitializeTasks(this.tasks)
-            }
-          )
+        this.fetchCall(JSON.stringify({'completed': task.completed}), task._id)
         break
       }
     }
