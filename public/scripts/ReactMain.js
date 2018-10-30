@@ -74,6 +74,7 @@ class EachTask extends React.Component {
       .then(
         json => {
           console.log(json)
+          console.log(this.props.tasks, 'prop tasks')
           this.props.reInitializeTasks(this.props.tasks)
         }
       )
@@ -222,8 +223,24 @@ class EachTask extends React.Component {
   }
 }
 
-  function Tasks(props) {
+  function TasksIncomplete(props) {
     var tasksToBeRendered = props.Tasks.map( function (task) {
+      if(!task.completed)
+        return (
+          <EachTask tasks={props.Tasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
+        )
+    })
+    console.log(tasksToBeRendered, 'To be rendered')
+    return (
+      <div>
+      {tasksToBeRendered}
+      </div>
+    )
+  }
+
+  function TasksCompleted(props) {
+    var tasksToBeRendered = props.Tasks.map( function (task) {
+      if(task.completed)
         return (
           <EachTask tasks={props.Tasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
         )
@@ -234,6 +251,7 @@ class EachTask extends React.Component {
       </div>
     )
   }
+
 
   class MainComponent extends React.Component {
     constructor(props) {
@@ -296,12 +314,12 @@ class EachTask extends React.Component {
         </div>
         <div id="addedTaskContainer">
         <h3>Tasks Yet to be Done! - &darr;</h3>
-        <Tasks Tasks={incompleteTasks} reInitializeTasks={this.reInitializeTasks}/>
+        <TasksIncomplete Tasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         <div className="vertLine"></div>
         <div id="completedTaskContainer">
         <h3>Completed Tasks... - &darr;</h3>
-        <Tasks Tasks={completedTasks} reInitializeTasks={this.reInitializeTasks}/>
+        <TasksCompleted Tasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         </div>
       )
