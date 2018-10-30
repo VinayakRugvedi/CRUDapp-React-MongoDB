@@ -292,21 +292,6 @@ class EachTask extends React.Component {
     }
 
     render() {
-        var incompleteTasks = [], completedTasks = []
-        for( let task of this.state.tasks) {
-          if(!task.completed) {
-            incompleteTasks.push(task)
-            // incompleteTasks = [...incompleteTasks , task]
-          }
-          else {
-            completedTasks.push(task)
-            // completedTasks = [...completedTasks , task]
-          }
-        }
-        console.log(incompleteTasks, 'incomplete dude')
-        console.log(completedTasks, 'complete dude')
-
-
       return (
         <div>
         <div id="getTask">
