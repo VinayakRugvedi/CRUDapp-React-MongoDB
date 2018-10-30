@@ -95,20 +95,6 @@ class EachTask extends React.Component {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value //never hardcode urls
         this.fetchCall(JSON.stringify({'taskname': task.taskname}), "POST",task._id)
-        // fetch('http://localhost:5000/tasks/' + task._id, {
-        //   method: "POST",
-        //   body: JSON.stringify({'taskname': task.taskname}),
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // })
-        //   .then( response => response.json())
-        //   .then(
-        //     json => {
-        //       console.log(json)
-        //       this.props.reInitializeTasks(this.props.tasks)
-        //     }
-        //   )
         break
       }
     }
@@ -119,21 +105,6 @@ class EachTask extends React.Component {
       if(task._id === this.props.taskId) {
         task.completed = !task.completed
         this.fetchCall(JSON.stringify({'completed': task.completed}), "POST",task._id)
-        // fetch('http://localhost:5000/tasks/' + task._id, {
-        //   method: "POST",
-        //   body: JSON.stringify({'completed': task.completed}),
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // })
-        //   .then( response => response.json())
-        //   .then(
-        //     json => {
-        //       console.log(json)
-        //       console.log(this.props.tasks, 'tasks b4 sending')
-        //       this.props.reInitializeTasks(this.props.tasks)
-        //     }
-        //   )
         break
       }
     }
@@ -143,20 +114,6 @@ class EachTask extends React.Component {
     for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         this.props.tasks.splice(this.props.tasks.indexOf(task), 1)
-        // fetch('http://localhost:5000/tasks/', {
-        //   method: "DELETE",
-        //   body : JSON.stringify({taskId:task._id}),
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // })
-        // .then(response => response.json())
-        // .then(
-        //   json => {
-        //     console.log(json)
-        //     this.props.reInitializeTasks(this.props.tasks)
-        //   }
-        // )
         this.fetchCall(JSON.stringify({taskId:task._id}), "DELETE")
         break
       }
@@ -187,22 +144,6 @@ class EachTask extends React.Component {
     for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.tasknotes = event.target.value
-        // fetch('http://localhost:5000/tasks/' + task._id, {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //    'tasknotes': task.tasknotes
-        //   }),
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // })
-        //   .then( response => response.json())
-        //   .then(
-        //     json => {
-        //       console.log(json)
-        //       this.props.reInitializeTasks(this.props.tasks)
-        //     }
-        //   )
         this.fetchCall(JSON.stringify({'tasknotes': task.tasknotes}), "POST", task._id)
         break
       }
