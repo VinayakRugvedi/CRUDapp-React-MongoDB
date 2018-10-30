@@ -52,7 +52,7 @@ class EachTask extends React.Component {
       displayNotes : 'none',
       edit : '\u270E',
     }
-    this.tasks = [...this.props.tasks]
+    // this.tasks = [...this.props.tasks]
     this.enableEditing = this.enableEditing.bind(this)
     this.toggleTask = this.toggleTask.bind(this)
     this.editing = this.editing.bind(this)
@@ -62,9 +62,9 @@ class EachTask extends React.Component {
     this.fetchCall = this.fetchCall.bind(this)
   }
 
-  fetchCall(bodyOfRequest, Id = '') {
+  fetchCall(bodyOfRequest, action, Id = '') {
     fetch('http://localhost:5000/tasks/' + Id, {
-      method: "POST",
+      method: action,
       body: bodyOfRequest,
       headers: {
         'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ class EachTask extends React.Component {
       .then(
         json => {
           console.log(json)
-          this.props.reInitializeTasks(this.tasks)
+          this.props.reInitializeTasks(this.props.tasks)
         }
       )
   }
@@ -90,43 +90,73 @@ class EachTask extends React.Component {
       taskData : event.target.value
     })
     //Filter
-    for(let task of this.tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.taskname = event.target.value //never hardcode urls
-        this.fetchCall(JSON.stringify({'taskname': task.taskname}), task._id)
+        this.fetchCall(JSON.stringify({'taskname': task.taskname}), "POST",task._id)
+        // fetch('http://localhost:5000/tasks/' + task._id, {
+        //   method: "POST",
+        //   body: JSON.stringify({'taskname': task.taskname}),
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        //   .then( response => response.json())
+        //   .then(
+        //     json => {
+        //       console.log(json)
+        //       this.props.reInitializeTasks(this.props.tasks)
+        //     }
+        //   )
         break
       }
     }
   }
 
   toggleTask () {
-    for(let task of this.tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.completed = !task.completed
-        this.fetchCall(JSON.stringify({'completed': task.completed}), task._id)
+        this.fetchCall(JSON.stringify({'completed': task.completed}), "POST",task._id)
+        // fetch('http://localhost:5000/tasks/' + task._id, {
+        //   method: "POST",
+        //   body: JSON.stringify({'completed': task.completed}),
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        //   .then( response => response.json())
+        //   .then(
+        //     json => {
+        //       console.log(json)
+        //       console.log(this.props.tasks, 'tasks b4 sending')
+        //       this.props.reInitializeTasks(this.props.tasks)
+        //     }
+        //   )
         break
       }
     }
   }
 
   deleteTask () {
-    for(let task of this.tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
-        this.tasks.splice(this.tasks.indexOf(task), 1)
-        fetch('http://localhost:5000/tasks/', {
-          method: "DELETE",
-          body : JSON.stringify({taskId:task._id}),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => response.json())
-        .then(
-          json => {
-            console.log(json)
-            this.props.reInitializeTasks(this.tasks)
-          }
-        )
+        this.props.tasks.splice(this.props.tasks.indexOf(task), 1)
+        // fetch('http://localhost:5000/tasks/', {
+        //   method: "DELETE",
+        //   body : JSON.stringify({taskId:task._id}),
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        // .then(response => response.json())
+        // .then(
+        //   json => {
+        //     console.log(json)
+        //     this.props.reInitializeTasks(this.props.tasks)
+        //   }
+        // )
+        this.fetchCall(JSON.stringify({taskId:task._id}), "DELETE")
         break
       }
     }
@@ -153,25 +183,26 @@ class EachTask extends React.Component {
     this.setState ({
       taskNotesData : event.target.value
     })
-    for(let task of this.tasks) {
+    for(let task of this.props.tasks) {
       if(task._id === this.props.taskId) {
         task.tasknotes = event.target.value
-        fetch('http://localhost:5000/tasks/' + task._id, {
-          method: "POST",
-          body: JSON.stringify({
-           'tasknotes': task.tasknotes
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then( response => response.json())
-          .then(
-            json => {
-              console.log(json)
-              this.props.reInitializeTasks(this.tasks)
-            }
-          )
+        // fetch('http://localhost:5000/tasks/' + task._id, {
+        //   method: "POST",
+        //   body: JSON.stringify({
+        //    'tasknotes': task.tasknotes
+        //   }),
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        //   .then( response => response.json())
+        //   .then(
+        //     json => {
+        //       console.log(json)
+        //       this.props.reInitializeTasks(this.props.tasks)
+        //     }
+        //   )
+        this.fetchCall(JSON.stringify({'tasknotes': task.tasknotes}), "POST", task._id)
         break
       }
     }
@@ -234,10 +265,12 @@ class EachTask extends React.Component {
       })
     }
 
-    reInitializeTasks(tasks) {
+    reInitializeTasks(modifiedTasks) {
+      console.log(modifiedTasks, 'modified tasks')
       this.setState({
-        tasks : [...tasks]
+        tasks : modifiedTasks
       })
+      console.log(this.state.tasks, 'state tasks')
     }
 
     render() {
@@ -245,11 +278,17 @@ class EachTask extends React.Component {
         for( let task of this.state.tasks) {
           if(!task.completed) {
             incompleteTasks.push(task)
+            // incompleteTasks = [...incompleteTasks , task]
           }
           else {
             completedTasks.push(task)
+            // completedTasks = [...completedTasks , task]
           }
         }
+        console.log(incompleteTasks, 'incomplete dude')
+        console.log(completedTasks, 'complete dude')
+
+
       return (
         <div>
         <div id="getTask">
