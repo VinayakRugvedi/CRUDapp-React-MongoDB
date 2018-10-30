@@ -203,23 +203,10 @@ class EachTask extends React.Component {
   }
 }
 
-function TasksIncomplete (props) {
-  var tasksToBeRendered = props.allTasks.map( function (task) {
-      return (
-        <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
-      )
-  })
-    return (
-      <div>
-      {tasksToBeRendered}
-      </div>
-    )
-  }
-
-  function TasksCompleted (props) {
-    var tasksToBeRendered = props.allTasks.map( function (task) {
+  function Tasks(props) {
+    var tasksToBeRendered = props.Tasks.map( function (task) {
         return (
-          <EachTask tasks={props.allTasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
+          <EachTask tasks={props.Tasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
         )
     })
     return (
@@ -268,7 +255,6 @@ function TasksIncomplete (props) {
     render() {
         var incompleteTasks = [], completedTasks = []
         for( let task of this.state.tasks) {
-          console.log(task.completed, 'completed state')
           if(!task.completed) {
             incompleteTasks.push(task)
           }
@@ -283,12 +269,12 @@ function TasksIncomplete (props) {
         </div>
         <div id="addedTaskContainer">
         <h3>Tasks Yet to be Done! - &darr;</h3>
-        <TasksIncomplete allTasks={incompleteTasks} reInitializeTasks={this.reInitializeTasks}/>
+        <Tasks Tasks={incompleteTasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         <div className="vertLine"></div>
         <div id="completedTaskContainer">
         <h3>Completed Tasks... - &darr;</h3>
-        <TasksCompleted allTasks={completedTasks} reInitializeTasks={this.reInitializeTasks}/>
+        <Tasks Tasks={completedTasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         </div>
       )
