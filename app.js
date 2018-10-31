@@ -3,6 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const bodyparser = require('body-parser')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const taskRoutes = require('./api/router/tasks')
 
@@ -10,12 +11,12 @@ mongoose.connect('mongodb+srv://vinayak:' + process.env.MONGO_ATLAS_PW + '@clust
   useNewUrlParser: true
 }
 )
-
+app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyparser.urlencoded({extended : false}))
 app.use(bodyparser.json())
 
-app.use(express.static('public'))
+app.use(express.static('public/build'))
 app.use('/tasks', taskRoutes)
 
 app.use((req, res, next) => {
