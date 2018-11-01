@@ -46,13 +46,12 @@ class EachTask extends React.Component {
     super (props) // Class components should always call the base constructor with props.
     this.state = {
       isDisabled : true,
-      taskData : this.props.taskName,
-      taskNotesData : this.props.taskNotes,
+      taskData : this.props.task.taskname,
+      taskNotesData : this.props.task.tasknotes,
       isHidden : true,
       displayNotes : 'none',
       edit : '\u270E',
     }
-    // this.tasks = [...this.props.tasks]
     this.enableEditing = this.enableEditing.bind(this)
     this.toggleTask = this.toggleTask.bind(this)
     this.editing = this.editing.bind(this)
@@ -74,8 +73,7 @@ class EachTask extends React.Component {
       .then(
         json => {
           console.log(json)
-          console.log(this.props.tasks, 'prop tasks')
-          this.props.reInitializeTasks(this.props.tasks)
+          this.props.reInitializeTasks(this.props.task, action=="DELETE")
         }
       )
   }
@@ -90,34 +88,17 @@ class EachTask extends React.Component {
     this.setState ({
       taskData : event.target.value
     })
-    //Filter
-    for(let task of this.props.tasks) {
-      if(task._id === this.props.taskId) {
-        task.taskname = event.target.value //never hardcode urls
-        this.fetchCall(JSON.stringify({'taskname': task.taskname}), "POST",task._id)
-        break
-      }
-    }
+    this.props.task.taskname = event.target.value //never hardcode urls
+    this.fetchCall(JSON.stringify({'taskname': this.props.task.taskname}), "POST",this.props.taskId)
   }
 
   toggleTask () {
-    for(let task of this.props.tasks) {
-      if(task._id === this.props.taskId) {
-        task.completed = !task.completed
-        this.fetchCall(JSON.stringify({'completed': task.completed}), "POST",task._id)
-        break
-      }
-    }
+    this.props.task.completed = !this.props.task.completed
+    this.fetchCall(JSON.stringify({'completed': this.props.task.completed}), "POST",this.props.taskId)
   }
 
   deleteTask () {
-    for(let task of this.props.tasks) {
-      if(task._id === this.props.taskId) {
-        this.props.tasks.splice(this.props.tasks.indexOf(task), 1)
-        this.fetchCall(JSON.stringify({taskId:task._id}), "DELETE")
-        break
-      }
-    }
+    this.fetchCall(JSON.stringify({taskId:this.props.taskId}), "DELETE")
   }
 
   addNotes () {
@@ -141,13 +122,8 @@ class EachTask extends React.Component {
     this.setState ({
       taskNotesData : event.target.value
     })
-    for(let task of this.props.tasks) {
-      if(task._id === this.props.taskId) {
-        task.tasknotes = event.target.value
-        this.fetchCall(JSON.stringify({'tasknotes': task.tasknotes}), "POST", task._id)
-        break
-      }
-    }
+    this.props.task.tasknotes = event.target.value
+    this.fetchCall(JSON.stringify({'tasknotes': this.props.task.tasknotes}), "POST", this.props.taskId) //Change id
   }
 
   render () {
