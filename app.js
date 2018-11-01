@@ -11,12 +11,13 @@ mongoose.connect('mongodb+srv://vinayak:' + process.env.MONGO_ATLAS_PW + '@clust
   useNewUrlParser: true
 }
 )
+
 app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyparser.urlencoded({extended : false}))
 app.use(bodyparser.json())
 
-app.use(express.static('public/build'))
+app.use(express.static('public'))
 app.use('/tasks', taskRoutes)
 
 app.use((req, res, next) => {
