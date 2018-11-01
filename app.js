@@ -17,7 +17,7 @@ app.use(morgan('dev'))
 app.use(bodyparser.urlencoded({extended : false}))
 app.use(bodyparser.json())
 
-app.use(express.static('public'))
+app.use(express.static('public/build'))
 app.use('/tasks', taskRoutes)
 
 app.use((req, res, next) => {
