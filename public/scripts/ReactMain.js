@@ -206,13 +206,14 @@ class EachTask extends React.Component {
 
     componentWillMount() {
         var tasksFromDB
-        fetch('http://localhost:5000/tasks').then(
+        fetch('http://localhost:5000/tasks')
+        .then(
           response => response.json()
-        ).then(
-          json => {
-            tasksFromDB = json
+        )
+        .then(
+          tasksFromDB => {
             this.setState({
-              tasks : [...tasksFromDB] // Check it man
+              tasks : tasksFromDB
             })
           }
         )
@@ -224,15 +225,30 @@ class EachTask extends React.Component {
       })
     }
 
-    reInitializeTasks(modifiedTasks) {
-      console.log(modifiedTasks, 'modified tasks')
+    reInitializeTasks(modifiedTask, flag = false) {
+      var tasksCopy = [...this.state.tasks]
+      for(let task of tasksCopy) {
+        if(task._id === modifiedTask._id) {
+          if(flag) {
+            tasksCopy.splice(tasksCopy.indexOf(task), 1)
+          }
+          else task = Object.assign({}, modifiedTask)
+          break
+        }
+      }
       this.setState({
-        tasks : modifiedTasks
+        tasks : tasksCopy
       })
-      console.log(this.state.tasks, 'state tasks')
     }
 
     render() {
+      const incompleteTasks = []
+      const completedTasks = []
+      for(let task of this.state.tasks) {
+        if(!task.completed)  incompleteTasks.push(task)
+        else completedTasks.push(task)
+      }
+
       return (
         <div>
         <div id="getTask">
@@ -240,12 +256,12 @@ class EachTask extends React.Component {
         </div>
         <div id="addedTaskContainer">
         <h3>Tasks Yet to be Done! - &darr;</h3>
-        <TasksIncomplete Tasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
+        <TasksIncomplete Tasks={incompleteTasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         <div className="vertLine"></div>
         <div id="completedTaskContainer">
         <h3>Completed Tasks... - &darr;</h3>
-        <TasksCompleted Tasks={this.state.tasks} reInitializeTasks={this.reInitializeTasks}/>
+        <TasksCompleted Tasks={completedTasks} reInitializeTasks={this.reInitializeTasks}/>
         </div>
         </div>
       )
