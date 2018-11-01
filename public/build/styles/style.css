@@ -1,0 +1,228 @@
+html {
+  background-image: url('../images/blacktexture.jpg');
+  background-color: black;
+  background-repeat: repeat;
+}
+
+.modalWindow {
+  width: 99.5%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  position: absolute;
+  top: 0px;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modalContent {
+  width: 1000px;
+  height: 600px;
+  background-image: url('../images/penandpaper.jpeg');
+  background-size: 1000px 600px;
+  border: 2px solid white;
+  z-index: 2;
+  position: relative;
+  animation-duration: 250ms;
+  animation-name: bounceIn;
+}
+
+.modalContent p {
+  color: aqua;
+  font-size: 25px;
+  font-family: 'Kaushan Script', cursive;
+  bottom: 0;
+  text-align: center;
+  margin-top: 55%;
+}
+
+.close {
+  color: white;
+  font-size: 35px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.header {
+  font-family: 'Spirax', cursive;
+  padding-left: 20px;
+
+  color: white;
+  font-size: 50px;
+  letter-spacing: 3px;
+  margin: 10px auto;
+
+  border-left: 20px solid #45a1ff;
+  border-right: 1000px solid #45a1ff;
+
+  background-image: url("../images/procrastinatoredit.jpg");
+  background-repeat: no-repeat;
+  background-size: 200px auto;
+  background-position: 97% center;
+}
+
+h1 {
+  animation: flicker 1.7s linear infinite;
+}
+
+.tagLine {
+  font-family: 'Kaushan Script', cursive;
+  font-weight: light;
+  font-size: 20px;
+  letter-spacing: 5px;
+  color: white;
+  margin: 0 auto;
+  padding-left: 390px;
+}
+
+#getTask {
+  text-align: center;
+  margin: 30px auto;
+}
+
+#getTask input {
+  width: 600px;
+  height: 50px;
+  border: 3px dotted white;
+  background-color: rgba(243, 11, 135, 0.3);
+  font-size: 20px;
+  padding-left: 10px;
+  color: white;
+  font-family: 'Marcellus', serif;
+}
+
+button {
+  width: 50px;
+  height: 45px;
+  margin-left: 5px;
+  background-color: rgba(69,161,255,0.5);
+  border: 2px dotted white;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+button:hover {
+  background-color: rgba(255,69,0,1);
+  color: black;
+}
+
+#addedTaskContainer {
+  width: 49%;
+  height: 660px;
+  padding-left: 10px;
+  float: left;
+  overflow: auto;
+  z-index: -1;
+}
+
+#addedTaskContainer input{
+  display: inline-block;
+  margin: 20px auto;
+  width: 73%;
+  color: white;
+  background-color: rgba(255,0,0,0.3);
+  border-radius: 5px;
+  border: 2px solid white;
+  font-size: 20px;
+  font-family: 'Marcellus', serif;
+  padding: 10px 5px;
+  animation-duration: 250ms;
+  animation-name: bounceIn;
+  box-shadow: 0 0 15px red;
+}
+
+.vertLine {
+  position: fixed;
+  top: 245px;
+  left: 50%;
+  bottom: 45px;
+  background-color: cyan;
+  width: 5px;
+}
+
+h3 {
+  color: white;
+  text-align: center;
+  margin: 0px;
+}
+
+#completedTaskContainer {
+  width: 49%;
+  height: 660px;
+  float: right;
+  overflow: auto;
+  z-index: -1;
+}
+
+#completedTaskContainer input {
+  display: inline-block;
+  margin: 20px auto;
+  width: 73%;
+  color: white;
+  background-color: rgba(0,255,0,0.3);
+  border-radius: 5px;
+  border: 2px solid white;
+  font-size: 20px;
+  font-family: 'Marcellus', serif;
+  padding: 10px 5px;
+  animation-duration: 250ms;
+  animation-name: bounceIn;
+}
+
+textarea {
+  background-color: rgba(0,0,0,0.9);
+  color: white;
+  width: 230px;
+  height: 95px;
+  font-family: 'Marcellus', serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  border: 2px dashed white;
+  position: absolute;
+  top: 19px;
+  right: 250px;
+  z-index: 1;
+  animation-duration: 250ms;
+  animation-name: bounceIn;
+}
+
+.container {
+  position : relative;
+  padding-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+footer {
+  padding: 10px 5px;
+  background-color: #45a1ff;
+  font-size: 20px;
+  text-align: center;
+  color: black;
+  position: fixed;
+  bottom: 0px;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes flicker {
+  0%,50%,100% {
+    color:rgba(255,255,255,0.99); text-shadow: 0 0 40px red,0 0 20px FireBrick,0 0 6px DarkRed;
+  }
+  25%,75% {
+    color:rgba(255,255,255,0.4); text-shadow: none;
+  }
+}
