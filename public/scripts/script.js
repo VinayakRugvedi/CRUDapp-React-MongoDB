@@ -1,9 +1,9 @@
-//To handle the modal window
+//To handle the modal window and voice
 
-// document.body.onload = playFunc
-// function playFunc () {
-//   responsiveVoice.speak("Hello Procrastinators, welcome to the secret diary of your dreams!", "UK English Male")
-// }
+document.body.onload = playFunc
+function playFunc () {
+  responsiveVoice.speak("Hello Procrastinators, welcome to the secret diary of your dreams!", "UK English Male")
+}
 
 var closer = document.querySelector('.close')
 closer.addEventListener('click', () => {
