@@ -164,20 +164,18 @@ class EachTask extends React.Component {
   }
 }
 
-  function TasksIncomplete(props) {
-    var tasksToBeRendered = props.Tasks.map( function (task) {
-      if(!task.completed)
-        return (
-          <EachTask tasks={props.Tasks} taskName={task.taskname} taskNotes={task.tasknotes} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
-        )
-    })
-    console.log(tasksToBeRendered, 'To be rendered')
-    return (
-      <div>
-      {tasksToBeRendered}
-      </div>
-    )
-  }
+function TasksIncomplete(props) {
+  var tasksToBeRendered = props.Tasks.map( function (task) {
+      return (
+        <EachTask task={task} taskId={task._id} key={task._id} reInitializeTasks={props.reInitializeTasks}/>
+      )
+  })
+  return (
+    <div>
+    {tasksToBeRendered}
+    </div>
+  )
+}
 
   function TasksCompleted(props) {
     var tasksToBeRendered = props.Tasks.map( function (task) {
